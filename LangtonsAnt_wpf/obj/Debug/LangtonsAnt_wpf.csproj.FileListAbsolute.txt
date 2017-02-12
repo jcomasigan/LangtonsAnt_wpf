@@ -1,0 +1,14 @@
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\bin\Debug\LangtonsAnt_wpf.exe.config
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\LangtonsAnt_wpf.csprojResolveAssemblyReference.cache
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\MainWindow.g.cs
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\App.g.cs
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\LangtonsAnt_wpf_MarkupCompile.cache
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\LangtonsAnt_wpf_MarkupCompile.lref
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\bin\Debug\LangtonsAnt_wpf.exe
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\bin\Debug\LangtonsAnt_wpf.pdb
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\MainWindow.baml
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\LangtonsAnt_wpf.g.resources
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\LangtonsAnt_wpf.Properties.Resources.resources
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\LangtonsAnt_wpf.csproj.GenerateResource.Cache
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\LangtonsAnt_wpf.exe
+C:\Users\Jericho Masigan\Documents\Programming\LangtonsAnt_wpf\LangtonsAnt_wpf\obj\Debug\LangtonsAnt_wpf.pdb
