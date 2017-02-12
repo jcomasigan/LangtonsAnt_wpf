@@ -11,6 +11,11 @@ namespace LangtonsAnt_wpf
     
     public enum TurnDirection { Clockwise, AntiClockwise};
 
+    public class ColorValues
+    {
+        public static Color OriginalColor { get; set; }
+        public static Color ReplacementColor { get; set; }
+    }
     public class AntVector
     {
         public enum MoveTo { X, Y };
@@ -54,102 +59,69 @@ namespace LangtonsAnt_wpf
         }
     }
 
-
+    public struct ColourAndRotation
+    {
+        public Color Colour;
+        public TurnDirection Direction;
+    }
     public static class LangtonAnt
     {
         public static int _canvasSize;
-        public static Bitmap Ant(Bitmap canvas, ref Ant ant, int canvasSize, int sleepTime = 500)
+        public static Bitmap Ant(Bitmap canvas, ref Ant ant, int canvasSize, Dictionary<Color, ColourAndRotation> colDic, int sleepTime = 500)
         {
             _canvasSize = canvasSize;
             AntCoordinates newCoordinates = ant.coord;
             Color antPixel = canvas.GetPixel(ant.coord.X, ant.coord.Y);
-            if(antPixel.R == 0)
+            foreach(KeyValuePair<Color, ColourAndRotation> kv in colDic)
             {
-                switch(ant.facing)
+                Color original = kv.Key;
+                Color replacement = kv.Value.Colour;
+                TurnDirection dir = kv.Value.Direction;
+                if(antPixel == kv.Key)
                 {
-                    //Ant on black pixel
-                    case Facing.North:
-                        {
-                            canvas = ChangePixel(canvas, newCoordinates);
-                            newCoordinates.X = ant.coord.X - 1;
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            ant.facing = Facing.West;
-
-                            break;
-                        }
-                    case Facing.East:
-                        {
-                            canvas = ChangePixel(canvas, newCoordinates);
-                            newCoordinates.Y = ant.coord.Y - 1;
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            ant.facing = Facing.North;
-                            break;
-                        }
-                    case Facing.South:
-                        {
-                            canvas = ChangePixel(canvas, newCoordinates);
-                            newCoordinates.X = ant.coord.X + 1;
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            ant.facing = Facing.East;
-                            break;
-                        }
-                    case Facing.West:
-                        {
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            canvas = ChangePixel(canvas, newCoordinates);
-                            newCoordinates.Y = ant.coord.Y + 1;
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            ant.facing = Facing.South;
-                            break;
-                        }
+                    canvas = ChangePixel(canvas, ant.coord, replacement);
+                    ant = TurnAndMove(ant, dir);
                 }
+            }
+            /*
+            if (antPixel.R == 0 && antPixel.G == 0 && antPixel.B == 0)
+            {
+
+                canvas = ChangePixel(canvas, ant.coord, Color.FromArgb(50, 50, 50));
+                ant = TurnAndMove(ant, TurnDirection.Clockwise);
+            }
+            else if (antPixel.R == 50 && antPixel.G == 50 && antPixel.B == 50)
+            {
+                canvas = ChangePixel(canvas, ant.coord, Color.FromArgb(0, 255, 0));
+                ant = TurnAndMove(ant, TurnDirection.AntiClockwise);
+            }
+            else if (antPixel.R == 0 && antPixel.G == 255 && antPixel.B == 0)
+            {
+
+                canvas = ChangePixel(canvas, ant.coord, Color.FromArgb(0, 0, 255));
+                ant = TurnAndMove(ant, TurnDirection.Clockwise);
+            }
+            else if (antPixel.R == 0 && antPixel.G == 0 && antPixel.B == 255)
+            {
+
+                canvas = ChangePixel(canvas, ant.coord, Color.FromArgb(100, 255, 20));
+                ant = TurnAndMove(ant, TurnDirection.Clockwise);
+            }
+            else if (antPixel.R == 100 && antPixel.G == 255 && antPixel.B == 20)
+            {
+                canvas = ChangePixel(canvas, ant.coord, Color.FromArgb(255, 255, 255));
+                ant = TurnAndMove(ant, TurnDirection.Clockwise);
             }
             else
             {
-                //Ant on white pixel
-                switch (ant.facing)
-                {
-                    case Facing.North:
-                        {
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            canvas = ChangePixel(canvas, newCoordinates);
-                            newCoordinates.X = ant.coord.X + 1;
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            ant.facing = Facing.East;
-                            break;
-                        }
-                    case Facing.East:
-                        {
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            canvas = ChangePixel(canvas, newCoordinates);
-                            newCoordinates.Y = ant.coord.Y + 1;
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            ant.facing = Facing.South;
-                            break;
-                        }
-                    case Facing.South:
-                        {
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            canvas = ChangePixel(canvas, newCoordinates);
-                            newCoordinates.X = ant.coord.X - 1;
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            ant.facing = Facing.West;
-                            break;
-                        }
-                    case Facing.West:
-                        {
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            canvas = ChangePixel(canvas, newCoordinates);
-                            newCoordinates.Y = ant.coord.Y - 1;
-                            newCoordinates = CheckBounds(newCoordinates, canvasSize);
-                            ant.facing = Facing.North;
-                            break;
-                        }
-                }
+
+                canvas = ChangePixel(canvas, ant.coord, Color.FromArgb(0, 0, 0));
+                ant = TurnAndMove(ant, TurnDirection.AntiClockwise);
             }
-            ant.coord = newCoordinates;
+            */
             return canvas;
         }
+
 
         private static Ant TurnAndMove(Ant ant, TurnDirection dir)
         {
@@ -190,8 +162,41 @@ namespace LangtonsAnt_wpf
             }
             else
             {
+                switch (ant.facing)
+                {
+                    case Facing.North:
+                        {
+                            newCoordinates.X = ant.coord.X - 1;
+                            newCoordinates = CheckBounds(newCoordinates, _canvasSize);
+                            ant.facing = Facing.West;
 
+                            break;
+                        }
+                    case Facing.East:
+                        {
+                            newCoordinates.Y = ant.coord.Y - 1;
+                            newCoordinates = CheckBounds(newCoordinates, _canvasSize);
+                            ant.facing = Facing.North;
+                            break;
+                        }
+                    case Facing.South:
+                        {
+                            newCoordinates.X = ant.coord.X + 1;
+                            newCoordinates = CheckBounds(newCoordinates, _canvasSize);
+                            ant.facing = Facing.East;
+                            break;
+                        }
+                    case Facing.West:
+                        {
+                            newCoordinates.Y = ant.coord.Y + 1;
+                            newCoordinates = CheckBounds(newCoordinates, _canvasSize);
+                            ant.facing = Facing.South;
+                            break;
+                        }
+                }
             }
+            ant.coord = newCoordinates;
+            return ant;
         }
         private static AntCoordinates CheckBounds(AntCoordinates coord, int canvasSize)
         {
@@ -214,20 +219,11 @@ namespace LangtonsAnt_wpf
             }
             return coord;
         }
-        private static Bitmap ChangePixel(Bitmap canvas, AntCoordinates coord)
+        private static Bitmap ChangePixel(Bitmap canvas, AntCoordinates coord, Color col)
         {
             Color color = canvas.GetPixel(coord.X, coord.Y);
             bool isSyscol = color.IsSystemColor;
-            if(color.R == 0)
-            {
-                canvas.SetPixel(coord.X, coord.Y, Color.White);
-            }
-            else
-            {
-                canvas.SetPixel(coord.X, coord.Y, Color.Black);
-            }
-
-
+            canvas.SetPixel(coord.X, coord.Y, col);
             return canvas;
         }
 

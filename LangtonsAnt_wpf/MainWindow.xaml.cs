@@ -33,10 +33,12 @@ namespace LangtonsAnt_wpf
         bool isProccessed;
         int stepCounter;
         int bitmapSize;
+        Dictionary<System.Drawing.Color, ColourAndRotation> coloursDic;
+
         public MainWindow()
         {
             InitializeComponent();
-            bitmapSize = 200;
+            bitmapSize = 300;
             isProccessed = false;
             sw = new Stopwatch();
         }
@@ -50,9 +52,13 @@ namespace LangtonsAnt_wpf
         {
             if (isProccessed)
             {
+                if(stepCounter > 1000000)
+                {
+                    timer.Stop();
+                }
                 isProccessed = false;
-                previousColour = canvas.GetPixel(ant.coord.X, ant.coord.Y);
-                canvas = LangtonAnt.Ant(canvas, ref ant, bitmapSize);
+                previousColour = canvas.GetPixel(ant.coord.X, ant.coord.Y);               
+                canvas = LangtonAnt.Ant(canvas, ref ant, bitmapSize, coloursDic);
                 previousColour = canvas.GetPixel(ant.coord.X, ant.coord.Y);
                 canvas.SetPixel(ant.coord.X, ant.coord.Y, System.Drawing.Color.Red);
                 _AntCanvas.Source = ConvertBitmap(canvas);
@@ -62,14 +68,59 @@ namespace LangtonsAnt_wpf
                 TimeSpan ts = sw.Elapsed;
                 Decimal t = Convert.ToDecimal(stepCounter / ts.TotalMilliseconds);
                 _stepCounter.Content = string.Format("Step taken: {0}. @{1} steps/milisecond", stepCounter.ToString(), (Math.Round(t, 2)).ToString());
-                if(stepCounter == 11000)
+                if(stepCounter % 1000 == 0)
                 {
-                    canvas.Save(@"C:\Users\Jericho Masigan\Documents\Test Environment\langtonant\11000steps.bmp");
+                    canvas.Save(@"C:\Users\Jericho Masigan\Documents\Test Environment\langtonant\A " + stepCounter.ToString() + ".bmp");
                 }
                 isProccessed = true;
+                
             }
         }
 
+        private void InitColour()
+        {
+            coloursDic = new Dictionary<System.Drawing.Color, ColourAndRotation>();
+            ColourAndRotation black;
+            black.Colour = System.Drawing.Color.FromArgb(255, 255, 255);
+            black.Direction = TurnDirection.Clockwise;
+
+            ColourAndRotation magenta;
+            magenta.Colour = System.Drawing.Color.FromArgb(255, 0, 255);
+            magenta.Direction = TurnDirection.Clockwise;
+
+            ColourAndRotation lime;
+            lime.Colour = System.Drawing.Color.FromArgb(0, 255, 0);
+            lime.Direction = TurnDirection.AntiClockwise;
+
+            ColourAndRotation orangered;
+            orangered.Colour = System.Drawing.Color.FromArgb(255, 69, 0);
+            orangered.Direction = TurnDirection.AntiClockwise;
+
+            ColourAndRotation cyan;
+            cyan.Colour = System.Drawing.Color.FromArgb(0, 255, 255);
+            cyan.Direction = TurnDirection.AntiClockwise;
+
+            ColourAndRotation dodgerblue;
+            dodgerblue.Colour = System.Drawing.Color.FromArgb(30, 144, 255);
+            dodgerblue.Direction = TurnDirection.Clockwise;
+
+            ColourAndRotation goldenrod;
+            goldenrod.Colour = System.Drawing.Color.FromArgb(218, 165, 32);
+            goldenrod.Direction = TurnDirection.AntiClockwise;
+
+            ColourAndRotation white;
+            white.Colour = System.Drawing.Color.FromArgb(0, 0, 0);
+            white.Direction = TurnDirection.Clockwise;
+
+            coloursDic.Add(white.Colour, black);
+            coloursDic.Add(black.Colour, magenta);
+            coloursDic.Add(magenta.Colour, lime);
+            coloursDic.Add(lime.Colour, orangered);
+            coloursDic.Add(orangered.Colour, cyan);
+            coloursDic.Add(cyan.Colour, dodgerblue);
+            coloursDic.Add(dodgerblue.Colour, goldenrod);
+            coloursDic.Add(goldenrod.Colour, white);
+        }
 
         public BitmapImage ConvertBitmap(Bitmap src)
         {
@@ -85,6 +136,7 @@ namespace LangtonsAnt_wpf
 
         private void _StartButton_Click(object sender, RoutedEventArgs e)
         {
+            InitColour();
             isProccessed = true;
             canvas = new Bitmap(bitmapSize, bitmapSize, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             using (Graphics gfx = Graphics.FromImage(canvas))
